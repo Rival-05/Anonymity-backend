@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rival-05/Anonymity-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Rival-05/Anonymity-backend/issues"
+  },
+  "homepage": "https://github.com/Rival-05/Anonymity-backend#readme",
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "better-auth": "^1.2.12",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.7"
+  }
+}

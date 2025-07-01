@@ -1,0 +1,28 @@
+# Environment variables
+.env
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+generated/
+
+# TypeScript
+*.tsbuildinfo
+
+# Prisma
+prisma/migrations/
+
+# Logs
+logs/
+*.log
+
+# OS/Editor specific
+.DS_Store
+.vscode/
+.idea/
+
+# Optional: lock file for non-preferred package managers
+# If using npm, you may want to ignore yarn.lock
+yarn.lock

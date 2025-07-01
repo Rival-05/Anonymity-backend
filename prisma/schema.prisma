@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())      // Internal UUID
+  email     String   @unique                   // From Google
+  name      String?                            // From Google
+  image     String?                            // From Google
+  createdAt DateTime @default(now())
+
+  messages      Message[]
+  sessionUsers  SessionUser[]
+}
+
+model Session {
+  id        String   @id @default(uuid()) // This is the "room"
+  createdAt DateTime @default(now())
+
+  messages      Message[]
+  participants  SessionUser[]
+}
+
+model SessionUser {
+  id        String   @id @default(uuid())
+  userId    String
+  sessionId String
+  joinedAt  DateTime @default(now())
+
+  user     User    @relation(fields: [userId], references: [id])
+  session  Session @relation(fields: [sessionId], references: [id])
+
+  @@unique([userId, sessionId]) // prevent duplicate entries
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId    String
+  sessionId String
+
+  user      User    @relation(fields: [userId], references: [id])
+  session   Session @relation(fields: [sessionId], references: [id])
+}
