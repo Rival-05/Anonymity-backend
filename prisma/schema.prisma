@@ -1,52 +1,58 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // or "sqlite", etc.
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(uuid())      // Internal UUID
-  email     String   @unique                   // From Google
-  name      String?                            // From Google
-  image     String?                            // From Google
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  image     String? // profile photo URL
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  messages      Message[]
-  sessionUsers  SessionUser[]
+  sessionUsers SessionUser[]
+  messages     Message[]
 }
 
 model Session {
-  id        String   @id @default(uuid()) // This is the "room"
+  id        String   @id @default(cuid())
+  title     String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  messages      Message[]
-  participants  SessionUser[]
+  sessionUsers SessionUser[]
+  messages     Message[]
 }
 
 model SessionUser {
-  id        String   @id @default(uuid())
-  userId    String
-  sessionId String
-  joinedAt  DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String
+  sessionId   String
+  displayName String // anonymous name used within the session
+  joinedAt    DateTime @default(now())
 
-  user     User    @relation(fields: [userId], references: [id])
-  session  Session @relation(fields: [sessionId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  session Session @relation(fields: [sessionId], references: [id])
 
-  @@unique([userId, sessionId]) // prevent duplicate entries
+  messages Message[]
+
+  @@unique([userId, sessionId])
 }
 
 model Message {
-  id        String   @id @default(uuid())
-  content   String
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  content       String
+  createdAt     DateTime @default(now())
+  sessionId     String
+  sessionUserId String
 
-  userId    String
-  sessionId String
-
-  user      User    @relation(fields: [userId], references: [id])
-  session   Session @relation(fields: [sessionId], references: [id])
+  session     Session     @relation(fields: [sessionId], references: [id])
+  sessionUser SessionUser @relation(fields: [sessionUserId], references: [id])
+  User        User?       @relation(fields: [userId], references: [id])
+  userId      String?
 }
