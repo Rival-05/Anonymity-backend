@@ -13,7 +13,7 @@ app.use(
   })
 );
 
-app.all('/api/auth/*splat', toNodeHandler(auth));
+app.all('/api/auth/{*splat}', toNodeHandler(auth));
 app.use(express.json());
 // Mount express json middleware after Better Auth handler
 // or only apply it to routes that don't interact with Better Auth
@@ -23,12 +23,11 @@ app.get("/",(req,res)=>{
         msg:"hello"
     })
 });
-app.get("/api/auth/sign-in/social",(req,res)=>{
-    res.json({
-        msg:"reached social signin"
-    })
-})
- 
+
+// app.post("/api/auth/sign-in/social",(req,res) => {
+//     res.json({msg: "i am up"})
+// })
+
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
